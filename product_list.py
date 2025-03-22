@@ -38,19 +38,17 @@ def product_list():
                 st.write(product["description"])
                 st.markdown(f"価格: **{product['price']} 円**")
 
-                # 「購入へ進む」ボタン → 支払いボタンを表示するだけ
-                if st.button("購入へ進む", key=f"go_{product['id']}"):
-                    st.session_state[f"show_pay_{product['id']}"] = True
+                # ボタン押したら購入処理＋遷移
+                if st.button("購入へ進む", key=product["id"]):
+                    # ①購入履歴をUTCで記録（Supabaseの推奨通り）
+                    now_utc = datetime.utcnow().isoformat()
+                    supabase.table("purchase_info").insert({
+                        "product_id": product["id"],
+                        "purchased_at": now_utc
+                    }).execute()
 
-                # 「PayPayで支払う」ボタン → この時点で購入記録を入れて遷移
-                if st.session_state.get(f"show_pay_{product['id']}", False):
-                    if st.button("👉 PayPayで支払う", key=f"pay_{product['id']}"):
-                        now_utc = datetime.utcnow().isoformat()
-                        supabase.table("purchase_info").insert({
-                            "product_id": product["id"],
-                            "purchased_at": now_utc
-                        }).execute()
-                        st.markdown(f'<a href="{pay_url}" target="_blank">👉 PayPayで支払う</a>', unsafe_allow_html=True)
+                    # ②支払いリンクに遷移（リダイレクトではなく、リンクボタンに変更）
+                    st.markdown(f'<a href="{pay_url}" target="_blank">👉 PayPayで支払う</a>', unsafe_allow_html=True)
 
         st.markdown("---")  # 区切り線
 
