@@ -47,10 +47,8 @@ def product_list():
                         "purchased_at": now_utc
                     }).execute()
 
-                    # ②支払いリンクに遷移（※Streamlitのリンクボタンで対応）
-                    st.markdown(f"""
-                        <meta http-equiv="refresh" content="0;URL='{pay_url}'" />
-                    """, unsafe_allow_html=True)
+                    # ②支払いリンクに遷移（リダイレクトではなく、リンクボタンに変更）
+                    st.link_button("PayPayで支払いに進む", url=pay_url)
 
         st.markdown("---")  # 区切り線
 
