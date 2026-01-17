@@ -1,33 +1,23 @@
 import streamlit as st
-import streamlit.components.v1 as components  # ← ★これを追加
+import streamlit.components.v1 as components
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
 
-# --- GA4 注入 ---
-GA4_ID = os.getenv("GA4_MEASUREMENT_ID")
+# --- GTM 注入 ---
+components.html("""
+<!-- Google Tag Manager -->
+<script>
+(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-TGJWTDM8');
+</script>
+<!-- End Google Tag Manager -->
+""", height=0)
 
-def inject_ga4(measurement_id: str):
-    if not measurement_id:
-        st.warning("GA4_MEASUREMENT_ID が設定されていません（.envを確認）")
-        return
-
-    components.html(
-        f"""
-        <script async src="https://www.googletagmanager.com/gtag/js?id={measurement_id}"></script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){{dataLayer.push(arguments);}}
-          gtag('js', new Date());
-          gtag('config', '{measurement_id}');
-        </script>
-        """,
-        height=0,
-    )
-
-# ★ページを描く前に必ず1回
-inject_ga4(GA4_ID)
 # --- ここまで ---
 
 
