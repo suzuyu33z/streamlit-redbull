@@ -22,8 +22,8 @@ def home():
     set_background_image()
     style_buttons()
     st.title("Office Wing")
-    st.button("購入する", on_click=lambda: go_to("product_list"))
-    st.button("コメントする", on_click=lambda: go_to("comment_form"))
+    st.button("購入する", key="home_btn_buy", on_click=lambda: go_to("product_list"))
+    st.button("コメントする", key="home_btn_comment", on_click=lambda: go_to("comment_form"))
 
     st.markdown("### コメント一覧")
     res = supabase.table("message_board").select("*").order("sent_at", desc=True).limit(10).execute()
