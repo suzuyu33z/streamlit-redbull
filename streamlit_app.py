@@ -26,7 +26,8 @@ components.html(f"""
   console.log('GA4 Debug: Page view sent');
   
   // カスタムイベント送信関数
-  window.sendGA4Event = function(eventName, parameters = {{}}) {{
+  window.sendGA4Event = function(eventName, parameters) {{
+    parameters = parameters || {{}};
     console.log('GA4 Debug: Sending custom event', eventName, parameters);
     gtag('event', eventName, parameters);
   }};
