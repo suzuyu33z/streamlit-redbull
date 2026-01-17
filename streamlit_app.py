@@ -16,6 +16,52 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-TGJWTDM8');
 </script>
 <!-- End Google Tag Manager -->
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TGJWTDM8"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+<script>
+// デバッグ用：dataLayerの内容を確認
+window.dataLayer = window.dataLayer || [];
+
+// GTM読み込み確認
+console.log('GTM Debug: dataLayer initialized', window.dataLayer);
+
+// ページビューの手動送信
+setTimeout(function() {
+    console.log('GTM Debug: Sending page_view event');
+    window.dataLayer.push({
+        'event': 'page_view',
+        'page_title': document.title,
+        'page_location': window.location.href,
+        'custom_parameter': 'streamlit_app'
+    });
+    console.log('GTM Debug: page_view event sent', window.dataLayer);
+}, 1000);
+
+// カスタムイベント送信関数
+window.sendGTMEvent = function(eventName, parameters = {}) {
+    console.log('GTM Debug: Sending custom event', eventName, parameters);
+    if (typeof window !== 'undefined' && window.dataLayer) {
+        window.dataLayer.push({
+            'event': eventName,
+            ...parameters
+        });
+        console.log('GTM Debug: Custom event sent', window.dataLayer);
+    }
+};
+
+// GTMが正しく読み込まれているかチェック
+setTimeout(function() {
+    if (typeof google_tag_manager !== 'undefined') {
+        console.log('GTM Debug: GTM loaded successfully');
+    } else {
+        console.log('GTM Debug: GTM not loaded');
+    }
+}, 2000);
+</script>
 """, height=0)
 
 # --- ここまで ---
