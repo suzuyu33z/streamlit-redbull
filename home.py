@@ -18,11 +18,11 @@ JST = timezone(timedelta(hours=9))
 
 def go_to(page_name):
     st.session_state["page"] = page_name
-    # GTMイベント送信
+    # GA4イベント送信
     components.html(f"""
     <script>
-    if (typeof window.sendGTMEvent === 'function') {{
-        window.sendGTMEvent('page_change', {{
+    if (typeof window.sendGA4Event === 'function') {{
+        window.sendGA4Event('page_change', {{
             'destination_page': '{page_name}',
             'source_page': 'home'
         }});

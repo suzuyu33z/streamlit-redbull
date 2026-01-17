@@ -5,62 +5,31 @@ import os
 
 load_dotenv()
 
-# --- GTM 注入 ---
-components.html("""
-<!-- Google Tag Manager -->
+# --- GA4 直接実装 ---
+ga4_measurement_id = os.getenv("GA4_MEASUREMENT_ID", "G-7D1HYY5YN7")
+
+components.html(f"""
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id={ga4_measurement_id}"></script>
 <script>
-(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-TGJWTDM8');
-</script>
-<!-- End Google Tag Manager -->
-
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TGJWTDM8"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-
-<script>
-// デバッグ用：dataLayerの内容を確認
-window.dataLayer = window.dataLayer || [];
-
-// GTM読み込み確認
-console.log('GTM Debug: dataLayer initialized', window.dataLayer);
-
-// ページビューの手動送信
-setTimeout(function() {
-    console.log('GTM Debug: Sending page_view event');
-    window.dataLayer.push({
-        'event': 'page_view',
-        'page_title': document.title,
-        'page_location': window.location.href,
-        'custom_parameter': 'streamlit_app'
-    });
-    console.log('GTM Debug: page_view event sent', window.dataLayer);
-}, 1000);
-
-// カスタムイベント送信関数
-window.sendGTMEvent = function(eventName, parameters = {}) {
-    console.log('GTM Debug: Sending custom event', eventName, parameters);
-    if (typeof window !== 'undefined' && window.dataLayer) {
-        window.dataLayer.push({
-            'event': eventName,
-            ...parameters
-        });
-        console.log('GTM Debug: Custom event sent', window.dataLayer);
-    }
-};
-
-// GTMが正しく読み込まれているかチェック
-setTimeout(function() {
-    if (typeof google_tag_manager !== 'undefined') {
-        console.log('GTM Debug: GTM loaded successfully');
-    } else {
-        console.log('GTM Debug: GTM not loaded');
-    }
-}, 2000);
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){{dataLayer.push(arguments);}}
+  gtag('js', new Date());
+  gtag('config', '{ga4_measurement_id}', {{
+    'page_title': document.title,
+    'page_location': window.location.href,
+    'custom_parameter': 'streamlit_app'
+  }});
+  
+  // デバッグ用
+  console.log('GA4 Debug: Analytics initialized with ID: {ga4_measurement_id}');
+  console.log('GA4 Debug: Page view sent');
+  
+  // カスタムイベント送信関数
+  window.sendGA4Event = function(eventName, parameters = {{}}) {{
+    console.log('GA4 Debug: Sending custom event', eventName, parameters);
+    gtag('event', eventName, parameters);
+  }};
 </script>
 """, height=0)
 
